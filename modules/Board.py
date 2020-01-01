@@ -33,7 +33,8 @@ class Board(object):
 		else:
 			self.tokens[y][x]=-1            
 			print('Token Succesfully Removed')
-
+	def showTokens(self,):
+		return self.tokens
 
 
 
