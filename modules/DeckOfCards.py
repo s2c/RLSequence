@@ -7,7 +7,7 @@ class Card(object):
         self.suit = suit
         self.rank = rank
     def show(self):
-        return(self.rank,self.suit)
+        return(self.suit,self.rank)
 
 class Deck(object):
     """Holds card objects"""
@@ -17,7 +17,7 @@ class Deck(object):
         self.build()
 
     def build(self):
-        suits = ['Diamonds','Hearts','Clubs','Spades']
+        suits = ['Diamonds','Hearts','Clubs','Spades'] # Diamonds and Hearts = 2 Eyed
         ranks = [x for x in range(1,14)]
         for i,s in enumerate(suits):
             for j,r in enumerate(ranks):
