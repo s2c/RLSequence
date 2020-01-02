@@ -39,12 +39,49 @@ class SequenceGame(object):
 			print(row)
 	def startGame(self):
 		print("2 Player Game Started")
-		self.showStatus()
+		self.showStatus()	
+	def isCorner(self,locX,locY):
+		if (locY==0) and (locX==0):
+			return True
+		elif (locY==9) and (locX==0):
+			return True
+		elif (locY==9) and (locX==9):
+			return True
+		elif (locY==0) and (locX==9):
+			return True
+		else:
+			return False
+	def checkWin(self,pIndex,locX,locY):
+		player = pIndex + 1
+		for i in range(locY-4,locY+1): # check Vertical
+		    curSum = 0
+		    for j in range(i,i+5):
+		        if (i < 0 or i+5 >= 10) and not(g.isCorner(i,locX)):
+		            break # out of bounds doesn't matter
+		        curSum += g.board.tokens[locY][4]
+		    if curSum/player == 5: # player has won with vertical
+		    	print('Player ' + str(player) + 'wins')
+
+		for i in range(locX-4,locX+1): # check Horizontal
+		    curSum = 0
+		    for j in range(i,i+5):
+		        if (i < 0 or i+5 >= 10) and not(g.isCorner(locX,i)):
+		            break # out of bounds doesn't matter
+		        curSum += g.board.tokens[locY][locX]
+		    if curSum/player == 5: # player has won with vertical
+		    	print('Player ' + str(player) + 'wins')
+
+
+
 	def nextState(self,pIndex,pCard,locX,locY):
 		playerCard = self.players[pIndex].play(pCard)
 		print("Player " + str(pIndex+1) + " tries to play card " + str(playerCard.show()) + ' at (' + str(locX) + ',' + str(locY) +')' )		
 		if self.board.placeToken(playerCard) != 1:
 			print('Game state not advanced')
-		print("Player " + str(pIndex+1) + " Played card " + str(playerCard.show()) + ' at (' + str(locX) + ',' + str(locY) +')' )
-
+			return -1
+		print("Player played card succesfully" )
+		self.checkWin(pIndex,locX,locY)
+		self.givePlayerCard(pIndex)
+		self.TotalTurns += 1
+		self.curTurn = (pIndex + 1 ) % self.numPlayers
 
