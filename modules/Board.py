@@ -7,25 +7,26 @@ class Board(object):
 		self.rows = boardSize
 		self.columns = boardSize
 		self.board = []
-		self.tokens = [[-1]*self.rows]*self.columns
+		self.tokens = [[-1 for x in range(0,self.rows)] for y in range(0,self.columns)]
 		self.setBoard()
-		self.showBoard = self.showBoard()
 	def setBoard(self,listOfCards = None):
 		if listOfCards != None:
 			self.board = listOfCards #listOfCards is 10x10 array containing Card objects
 		else: # BuildDefault Board
 			self.board = defaultBoard
-	def showBoard(self):
+	def show(self):
 		return [[x.show() for x in row] for row in self.board]
 	def placeToken(self,card,player,x,y):
 		if self.tokens[y][x] !=-1:
 			print('Spot already Taken. Token Not Placed')
-			return            
-		if self.board[y][x].show() == card.show() or card.show()==('Diamonds',11) or card.show()==('Hearts',11):
-			self.tokens[y][x] = player
+			return -1           
+		elif self.board[y][x].show() == card.show() or card.show()==('Diamonds',11) or card.show()==('Hearts',11):
+			self.tokens[y][x] = player + 1
 			print('Token Placed Succesfully')
+			return 1
 		else:
-			print('Token Not Placed')
+			print('Token Not Placed. Invalid Card')
+			return -2
 	def removeToken(self,card,x,y):
 		if self.tokens[y][x] ==-1 or (card.show() != ('Spades',11) and card.show() !=('Clubs',11)):
 			print('Already empty or Invalid Card. Token Not Removed')
@@ -33,7 +34,7 @@ class Board(object):
 		else:
 			self.tokens[y][x]=-1            
 			print('Token Succesfully Removed')
-	def showTokens(self,):
+	def showTokens(self):
 		return self.tokens
 
 

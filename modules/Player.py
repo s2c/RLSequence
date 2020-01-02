@@ -12,7 +12,7 @@ class Player(object):
 	def setHand(self,deck):
 		for i in range(0,self.handSize):
 			self.draw(deck)
-        
+		
 	def draw(self,deck):
 		self.hand.append(deck.drawCard())
 	def addCard(self,card):
