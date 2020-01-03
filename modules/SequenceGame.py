@@ -47,12 +47,12 @@ class SequenceGame(object):
 		for i in range(locY-4,locY+1): # check Vertical
 			curSum = 0
 			for j in range(i,i+5):
-				if (i < 0 or i+5 >= 10) and not(g.board.isCorner(j,locX)):
+				if (i < 0 or i+4 >= 10) and not(self.board.isCorner(j,locX)):
 					break # out of bounds doesn't matter
-				if (g.board.isCorner(j,locX)):
+				if (self.board.isCorner(j,locX)):
 					curSum += player
 				else:
-					curSum += g.board.tokens[j][locX]
+					curSum += self.board.tokens[j][locX]
 			if curSum/player == 5: # player has won with vertical
 				print('Player ' + str(player + 1) + 'wins')
 				return 1
@@ -60,14 +60,14 @@ class SequenceGame(object):
 		for i in range(locX-4,locX+1): # check Horizontal
 			curSum = 0
 			for j in range(i,i+5):
-				if (i < 0 or i+5 >= 10) and not(g.board.isCorner(locX,j)):
+				if (i < 0 or i+4 >= 10) and not(self.board.isCorner(locX,j)):
 					break # out of bounds doesn't matter
-				if (g.board.isCorner(locY,j)):
+				if (self.board.isCorner(locY,j)):
 					curSum += player
 				else:
-					curSum += g.board.tokens[locY][j]
+					curSum += self.board.tokens[locY][j]
 			if curSum/player == 5: # player has won with vertical
-				print('Player ' + str(player + 1) + 'wins')
+				print('Player ' + str(player) + ' wins')
 				return 1
 		# for i
 
