@@ -20,7 +20,7 @@ class Board(object):
 		if self.tokens[y][x] !=-1 or self.isCorner(x,y):
 			print('Spot already Taken or Corner Location. Token Not Placed')
 			return -1           
-		elif self.board[y][x].show() == card.show() or card.show()==('Diamonds',11) or card.show()==('Hearts',11):
+		elif self.board[y][x].show() == card.show() or card.show()==('Diamonds',11) or card.show()==('Clubs',11):
 			self.tokens[y][x] = player + 1
 			print('Token Placed Succesfully')
 			return 1
@@ -28,7 +28,7 @@ class Board(object):
 			print('Token Not Placed. Invalid Card')
 			return -2
 	def removeToken(self,card,x,y):
-		if self.tokens[y][x] ==-1 or (card.show() != ('Spades',11) and card.show() !=('Clubs',11)):
+		if self.tokens[y][x] ==-1 or (card.show() != ('Spades',11) and card.show() !=('Hearts',11)):
 			print('Already empty or Invalid Card. Token Not Removed')
 			return            
 		else:
