@@ -9,6 +9,7 @@ class SequenceGame(object):
 		super(SequenceGame, self).__init__()
 		self.handsize = handSize
 		self.numPlayers = numPlayers
+		self.curState = 'PLAYING'
 		self.curTurn = 0
 		self.TotalTurns = 0
 		self.board = Board()
@@ -54,7 +55,7 @@ class SequenceGame(object):
 				else:
 					curSum += self.board.tokens[j][locX]
 			if curSum/player == 5: # player has won with vertical
-				print('Player ' + str(player + 1) + 'wins')
+				print('Player ' + str(player) + ' wins!')
 				return 1
 
 		for i in range(locX-4,locX+1): # check Horizontal
@@ -67,13 +68,19 @@ class SequenceGame(object):
 				else:
 					curSum += self.board.tokens[locY][j]
 			if curSum/player == 5: # player has won with vertical
-				print('Player ' + str(player) + ' wins')
+				print('Player ' + str(player) + ' wins!')
 				return 1
+		return 0
 		# for i
 
 
 
 	def nextState(self,pIndex,pCard,locX,locY):
+		if self.curState=='OVER':
+			print('GAME IS OVER')
+			print('RESET GAME TO PLAY AGAIN')
+			return -1
+
 		if pIndex != self.curTurn:
 			print('It is currently not ' + str(pIndex+1) + "'s Turn! ")
 			print('It is player ' + str(self.curTurn) + "'s Turn")
@@ -86,9 +93,17 @@ class SequenceGame(object):
 			self.players[pIndex].returnCard(pCard,playerCard)
 			return -1
 		print("Player played card succesfully" )
-		self.checkWin(pIndex,locX,locY)
+		if (self.checkWin(pIndex,locX,locY)==1):
+			self.curState = 'OVER'
+			return 1
+
 		self.givePlayerCard(pIndex)
 		self.TotalTurns += 1
 		self.curTurn = (pIndex + 1 ) % self.numPlayers
 		print('Token State')
 		self.showStatus()
+	def reset(self):
+		del self.board
+		del self.decks[:]
+		del self.players[:]
+		self.__init__(self.numPlayers,self.handsize)
