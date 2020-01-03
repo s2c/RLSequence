@@ -21,6 +21,8 @@ class Player(object):
 	def showHand(self):
 		showDeck = [x.show() for x in self.hand]
 		return showDeck
+	def returnCard(self,loc,card):
+		self.hand.insert(loc,card)
 
 	def play(self,cardNumber):
 		return (self.hand.pop(cardNumber))
