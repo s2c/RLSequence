@@ -6,6 +6,8 @@ class Board(object):
 
     def __init__(self, boardSize=10):
         super(Board, self).__init__()
+        self.removeCards = [('Spades', 11), ('Hearts', 11)]
+        self.jokerCards = [('Clubs', 11), ('Diamonds', 11)]
         self.rows = boardSize
         self.columns = boardSize
         self.board = []
@@ -26,7 +28,7 @@ class Board(object):
         if self.tokens[y][x] != -1 or self.isCorner(x, y):
             print('Spot already Taken or Corner Location. Token Not Placed')
             return -1
-        elif self.board[y][x].show() == card.show() or card.show() == ('Diamonds', 11) or card.show() == ('Clubs', 11):
+        elif self.board[y][x].show() == card.show() or card.show() in self.jokerCards:
             self.tokens[y][x] = player + 1
             print('Token Placed Succesfully')
             return 1
@@ -35,12 +37,13 @@ class Board(object):
             return -2
 
     def removeToken(self, card, x, y):
-        if self.tokens[y][x] == -1 or (card.show() != ('Spades', 11) and card.show() != ('Hearts', 11)):
+        if self.tokens[y][x] == -1 or (card.show() not in self.removeCards):
             print('Already empty or Invalid Card. Token Not Removed')
-            return
+            return -1
         else:
             self.tokens[y][x] = -1
             print('Token Succesfully Removed')
+            return 1
 
     def showTokens(self):
         return self.tokens

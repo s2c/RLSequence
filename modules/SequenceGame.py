@@ -10,7 +10,9 @@ class SequenceGame(object):
     def __init__(self, numPlayers=2, handSize=6):
         super(SequenceGame, self).__init__()
         self.handsize = handSize
-        self.numPlayers = numPlayers
+        if numPlayers > 2:  # Currently only supports 2 players
+            numPlayers = 2  # Currently only supports 2 players
+        self.numPlayers = numPlayers  # Currently only supports 2 players
         self.curState = 'PLAYING'
         self.curTurn = 0
         self.TotalTurns = 0
@@ -55,20 +57,20 @@ class SequenceGame(object):
         for i in range(locY - 4, locY + 1):  # check Vertical
             curSum = 0
             for j in range(i, i + 5):
-                if (i < 0 or i + 4 > self.board.columns) and not(self.board.isCorner(j, locX)):
+                if (i < 0 or i + 4 > self.board.columns - 1) and not(self.board.isCorner(j, locX)):
                     return -1  # out of bounds doesn't matter
                 if (self.board.isCorner(j, locX)):
                     curSum += player
                 else:
                     curSum += self.board.tokens[j][locX]
-            if curSum / player == 5:  # player has won with vertical
+            if curSum / player == 5.0:  # player has won with vertical
                 print('Player ' + str(player) + ' wins!')
                 return 1
 
         for i in range(locX - 4, locX + 1):  # check Horizontal
             curSum = 0
-            for j in range(i, i + 5):
-                if (i < 0 or i + 4 > self.board.rows) and not(self.board.isCorner(locX, j)):
+            for j in range(i, i + 5.0):
+                if (i < 0 or i + 4 > self.board.rows - 1) and not(self.board.isCorner(locX, j)):
                     return -1  # out of bounds doesn't matter
                 if (self.board.isCorner(locY, j)):
                     curSum += player
@@ -81,14 +83,14 @@ class SequenceGame(object):
             curSum = 0
             for k, j in enumerate(range(i, i + 5)):  # Check Left Diagnol
                 m = locY - (4 - k) + t
-                if (j < 0 or j > self.board.rows or m < 0 or m > self.board.columns) and not (self.board.isCorner(j, m)):
+                if (j < 0 or j > self.board.rows - 1 or m < 0 or m > self.board.columns - 1) and not (self.board.isCorner(j, m)):
                     return -1
                 if (self.board.isCorner(j, m)):
                     curSum += player
                 else:
                     curSum += self.board.tokens[m][j]
 
-            if curSum / player == 5:  # player has won with Left Diagnol
+            if curSum / player == 5.0:  # player has won with Left Diagnol
                 print('Player ' + str(player) + ' wins!')
                 return 1
 
@@ -106,10 +108,17 @@ class SequenceGame(object):
         playerCard = self.players[pIndex].play(pCard)
         print("Player " + str(pIndex + 1) + " tries to play card " +
               str(playerCard.show()) + ' at (' + str(locX) + ',' + str(locY) + ')')
-        if self.board.placeToken(playerCard, pIndex, locX, locY) != 1:
-            print('Game state not advanced')
-            self.players[pIndex].returnCard(pCard, playerCard)
-            return -1
+        if playerCard.show() not in self.board.removeCards:
+            if self.board.placeToken(playerCard, pIndex, locX, locY) != 1:
+                print('Game state not advanced')
+                self.players[pIndex].returnCard(pCard, playerCard)
+                return -1
+        else:
+            if self.board.removeToken(playerCard, locX, locY) != 1:
+                print('Game state not advanced')
+                self.players[pIndex].returnCard(pCard, playerCard)
+                return -1
+
         print("Player played card succesfully")
         if (self.checkWin(pIndex, locX, locY) == 1):
             self.curState = 'OVER'
